@@ -5,7 +5,7 @@ class Post(models.Model):
     class PostType(models.TextChoices):
         Blog = "Blog"
         Quote = "Quote"
-        Images = "images"
+        File = "File"
         Image = "Image"
         Video = "Video"
         Github = "Github"

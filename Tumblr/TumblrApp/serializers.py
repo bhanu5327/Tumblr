@@ -131,9 +131,11 @@ class PostSerializer(serializers.ModelSerializer):
             return list()
 
     def get_strategy(self, type):
-        if type.lower() == 'text':
+        text=('blog','quote')
+        link=('bookmark','github','video','image')
+        if type.lower() in text:
             return TextData()
-        elif type.lower() == 'link':
+        elif type.lower() in link:
             return LinkData()
         else:
             return NoneData()
@@ -183,7 +185,7 @@ class PostSerializer(serializers.ModelSerializer):
 class TextSerializer(serializers.ModelSerializer):
     class Meta:
         model = Text
-        fields = ('text1', 'text2', 'type')
+        fields = ('text1', 'text2')
 
     def get_queryset(self):
         return self.Meta.model.objects.all()
@@ -192,7 +194,7 @@ class TextSerializer(serializers.ModelSerializer):
 class LinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Link
-        fields = ('url', 'caption', 'type')
+        fields = ('url', 'caption')
 
     def get_queryset(self):
         return self.Meta.model.objects.all()

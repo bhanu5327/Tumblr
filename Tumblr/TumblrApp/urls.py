@@ -6,7 +6,6 @@ app_name = "tumblrapp"
 
 urlpatterns = [
     path('posts/all', PostCrudView.as_view()),  # To get all posts
-    path('posts/<str:type>/all', PostCrudView.as_view()),  # To get all posts by blogtype
     path('posts/<int:pk>', PostCrudView.as_view()),  # To get required post
     path('posts/create', PostCrudView.as_view()),  # To create a post
     path('posts/<int:pk>/files/all', PostFileCrudView.as_view()),  # To get all files in a post

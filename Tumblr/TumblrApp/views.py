@@ -14,27 +14,20 @@ class PostCrudView(ListCreateAPIView, RetrieveUpdateDestroyAPIView):
 
     def get(self, request, *args, **kwargs):
         filters = request.GET.copy()
+        print(filters)
+        filters.update(**kwargs)
         if 'pk' in kwargs:
             try:
                 data = self.serializer_class(self.queryset.get(pk=kwargs['pk']))
             except ObjectDoesNotExist as e:
                 return Response({'error': "No data with such ID found"}, status=status.HTTP_404_NOT_FOUND)
         else:
-            if 'type' in kwargs:
-                typedict = {'blog': 'text', 'quote': 'text', 'bookmark': 'link', 'image': 'link', 'video': 'link',
-                            'github': 'link'}
-                if kwargs['type'] not in typedict:
-                    return Response({'error': "No data with such BlogType found"}, status=status.HTTP_404_NOT_FOUND)
-                data1 = self.serializer_class(self.queryset.all().filter(post_type=typedict[kwargs['type']]), many=True)
-                postlist = []
-                for i in data1.data:
-                    if i['content_data']['type'].lower() == kwargs['type'].lower():
-                        postlist.append(i)
-                return Response(postlist, status=status.HTTP_200_OK)
-            else:
-                if len(filters):
-                    pass
-                data = self.serializer_class(self.queryset.all(), many=True)
+            params = dict()
+            if 'type' in filters:
+                params.update({
+                    "post_type__istartswith": filters['type']
+                })
+            data = self.serializer_class(self.queryset.filter(**params), many=True)
         return Response(data.data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
@@ -84,7 +77,7 @@ class PostFileCrudView(ListCreateAPIView, DestroyAPIView):
             return Response({'error': "No data with such ID found"}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request, *args, **kwargs):
-        files = request.FILES.getlist('file')
+        files = request.FILES.getlist('files')
         try:
             if 'pk' not in kwargs:
                 return Response({'error': "No Post ID given"}, status=status.HTTP_404_NOT_FOUND)
