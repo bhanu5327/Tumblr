@@ -3,9 +3,13 @@ from django.db import models
 
 class Post(models.Model):
     class PostType(models.TextChoices):
-        Text = "text"
-        Link = "link"
+        Blog = "Blog"
+        Quote = "Quote"
         Images = "images"
+        Image = "Image"
+        Video = "Video"
+        Github = "Github"
+        Bookmark = "Bookmark"
 
     id = models.AutoField(primary_key=True)
     user = models.CharField(max_length=20)
@@ -20,34 +24,21 @@ class Post(models.Model):
 
 
 class Text(models.Model):
-    class Type(models.TextChoices):
-        Blog = "Blog"
-        Quote = "Quote"
-
     post = models.ForeignKey(Post, on_delete=models.DO_NOTHING)
     text1 = models.CharField(max_length=1000)
     text2 = models.CharField(max_length=2000)
-    type = models.CharField(choices=Type.choices, max_length=10)
 
     def __str__(self):
         return "{0}'s {1} post -> {2} with {3}".format(self.user, self.id, self.text1, self.text2)
 
 
 class Link(models.Model):
-    class Type(models.TextChoices):
-        Image = "Image"
-        Video = "Video"
-        Github = "Github"
-        Bookmark = "Bookmark"
-
     post = models.ForeignKey(Post, on_delete=models.DO_NOTHING)
     url = models.CharField(max_length=1000)
     caption = models.CharField(max_length=2000)
-    type = models.CharField(choices=Type.choices, max_length=10)
 
     def __str__(self):
-        return "{0}'s {1} post of type {4} -> {2} with {3}".format(self.post.user, self.post.id, self.url, self.caption,
-                                                                   self.type)
+        return "{0}'s {1} post-> {2} with {3}".format(self.post.user, self.post.id, self.url, self.caption)
 
 
 class File(models.Model):
