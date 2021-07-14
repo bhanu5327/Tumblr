@@ -8,7 +8,7 @@ http://127.0.0.1:8000/posts/all   -> To get all created posts
 
 http://127.0.0.1:8000/posts/<1>  -> To get/update/delete a specific post (postid 1)
 
-http://127.0.0.1:8000/posts/<blogtype>/all -> To get all posts of a blogtype (blogtypes -> blog,quote,bookmark,image,video,github)
+http://127.0.0.1:8000/posts/all?type=<blogtype> -> To get all posts of a blogtype (blogtypes -> blog,quote,bookmark,image,video,github)
 
 http://127.0.0.1:8000/posts/<1>/files/all -> To get all files in a specific post (postid 1)
 
@@ -24,10 +24,10 @@ Samples for each API:
 
    POST Request: http://127.0.0.1:8000/posts/create
 		
-		{"user":"user1","post_type":"text","content_data":{"text1":"t1","text2":"t2","type":"Blog"},"likes":1,"tags":"#user1"}
-		{"user":"user2","post_type":"text","content_data":{"text1":"t1","text2":"t2","type":"Quote"},"likes":1,"tags":"#user2"}
-		{"user":"user3","post_type":"link","content_data":{"url":"https://www.youtube.com/watch?v=fEE4RO-_jug&t=5s","caption":"F9 trailer 2","type":"Video"},"likes":1,"tags":"#user3"}
-		{"user":"user4","post_type":"link","content_data":{"url":"imageurl","caption":"imageurl","type":"image"},"likes":1,"tags":"#user4"}
+		{"user":"user1","post_type":"Blog","content_data":{"text1":"t1","text2":"t2"},"likes":1,"tags":"#user1"}
+		{"user":"user2","post_type":"Quote","content_data":{"text1":"t1","text2":"t2"},"likes":1,"tags":"#user2"}
+		{"user":"user3","post_type":"Video","content_data":{"url":"https://www.youtube.com/watch?v=fEE4RO-_jug&t=5s","caption":"F9 trailer 2"},"likes":1,"tags":"#user3"}
+		{"user":"user4","post_type":"Image","content_data":{"url":"imageurl","caption":"imageurl"},"likes":1,"tags":"#user4"}
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -36,11 +36,11 @@ Samples for each API:
 Get Request -> http://127.0.0.1:8000/posts/all
 
 Response -> 
-	[{"id":7,"user":"user1","post_type":"link","content_data":{"url":"https://www.youtube.com/watch?v=fEE4RO-_jug&t=5s","caption":"F9 trailer 2","type":"Video"},"likes":1,"tags":"#user1","files":[]},
-	{"id":8,"user":"user1","post_type":"text","content_data":{"text1":"t1","text2":"t2","type":"Blog"},"likes":1,"tags":"#user1","files":[]},
-	{"id":9,"user":"user2","post_type":"text","content_data":{"text1":"t1","text2":"t2","type":"Quote"},"likes":1,"tags":"#user2","files":[]},
-	{"id":10,"user":"user3","post_type":"link","content_data":{"url":"https://www.youtube.com/watch?v=fEE4RO-_jug&t=5s","caption":"F9 trailer 2","type":"Video"},"likes":1,"tags":"#user3","files":[]},
-	{"id":11,"user":"user4","post_type":"link","content_data":{"url":"imageurl","caption":"imageurl","type":"image"},"likes":1,"tags":"#user4","files":[]}]
+	[{"id":7,"user":"user1","post_type":"Video","content_data":{"url":"https://www.youtube.com/watch?v=fEE4RO-_jug&t=5s","caption":"F9 trailer 2"},"likes":1,"tags":"#user1","files":[]},
+	{"id":8,"user":"user1","post_type":"Blog","content_data":{"text1":"t1","text2":"t2"},"likes":1,"tags":"#user1","files":[]},
+	{"id":9,"user":"user2","post_type":"Quote","content_data":{"text1":"t1","text2":"t2"},"likes":1,"tags":"#user2","files":[]},
+	{"id":10,"user":"user3","post_type":"Video","content_data":{"url":"https://www.youtube.com/watch?v=fEE4RO-_jug&t=5s","caption":"F9 trailer 2"},"likes":1,"tags":"#user3","files":[]},
+	{"id":11,"user":"user4","post_type":"Image","content_data":{"url":"imageurl","caption":"imageurl"},"likes":1,"tags":"#user4","files":[]}]
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
@@ -50,21 +50,23 @@ PUT Request:  http://127.0.0.1:8000/posts/7
 
 		form data -> {"likes":0}
 
-Response : {"id":7,"user":"user1","post_type":"link","content_data":{"url":"https://www.youtube.com/watch?v=fEE4RO-_jug&t=5s","caption":"F9 trailer 2","type":"Video"},"likes":0,"tags":"#user1","files":[]}
+Response : {"id":7,"user":"user1","post_type":"video","content_data":{"url":"https://www.youtube.com/watch?v=fEE4RO-_jug&t=5s","caption":"F9 trailer 2"},"likes":0,"tags":"#user1","files":[]}
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
-4) To get posts of all bolgtypes 'Quote'
+4) To get posts of all blogtype 'Quote'
 
-Get Request : http://127.0.0.1:8000/posts/quote/all
+Get Request : http://127.0.0.1:8000/posts/all?type='Quote'
 
-Response : {"id":9,"user":"user2","post_type":"text","content_data":{"text1":"t1","text2":"t2","type":"Quote"},"likes":1,"tags":"#user2","files":[]} 
+Response : {"id":9,"user":"user2","post_type":"Quote","content_data":{"text1":"t1","text2":"t2"},"likes":1,"tags":"#user2","files":[]} 
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
 5) To add files to a post (to add files to postid 1)
 
 	POST Request: http://127.0.0.1:8000/posts/1/files/add
+	
+	Request Payload : {"files":["/path/to/file"]}
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 
